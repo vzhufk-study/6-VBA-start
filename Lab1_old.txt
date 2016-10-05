@@ -1,0 +1,129 @@
+Private Sub setValues(bin As String, oct As String, dec As String, hex As String)
+    If (Len(bin) > 0) And (TextBoxBin.Text <> bin) Then
+        TextBoxBin.Value = bin
+    End If
+    If (Len(dec) > 0) And (TextBoxDec.Text <> dec) Then
+        TextBoxDec.Value = dec
+    End If
+    If (Len(oct) > 0) And (TextBoxOct.Text <> oct) Then
+        TextBoxOct.Value = oct
+    End If
+    If (Len(hex) > 0) And (TextBoxHex.Text <> hex) Then
+        TextBoxHex.Value = hex
+    End If
+End Sub
+
+
+Private Sub isValid()
+    'BIN CHECK
+    If IsNumeric(TextBoxBin.Text) = False Or Right(TextBoxBin.Text, 1) > "1" Then
+        If (Len(TextBoxBin.Text)) > 1 Then
+            TextBoxBin.Text = Mid(TextBoxBin.Text, 1, Len(TextBoxBin.Text) - 1)
+        Else
+            TextBoxBin.Text = ""
+        End If
+    End If
+    'DEC CHECK
+    If IsNumeric(TextBoxDec.Text) = False Then
+            If (Len(TextBoxDec.Text)) > 1 Then
+                TextBoxDec.Text = Mid(TextBoxDec.Text, 1, Len(TextBoxDec.Text) - 1)
+            Else
+                TextBoxDec.Text = ""
+            End If
+    End If
+    'OCT CHECK
+    If IsNumeric(TextBoxOct.Text) = False Or Right(TextBoxOct.Text, 1) > "7" Then
+            If (Len(TextBoxOct.Text)) > 1 Then
+                TextBoxOct.Text = Mid(TextBoxOct.Text, 1, Len(TextBoxOct.Text) - 1)
+            Else
+                TextBoxOct.Text = ""
+            End If
+    End If
+    'HEX CHECK
+    If Right(TextBoxHex.Text, 1) < "0" Or Right(TextBoxHex.Text, 1) > "F" Then
+            If (Len(TextBoxHex.Text)) > 1 Then
+            If (Right(TextBoxHex.Text, 1) <> " ") Then
+                TextBoxHex.Text = Mid(TextBoxHex.Text, 1, Len(TextBoxHex.Text) - 1)
+            End If
+            Else
+                TextBoxHex.Text = ""
+            End If
+    End If
+End Sub
+
+Private Sub TextBoxBin_Change()
+    isValid
+    Dim i As Integer
+    Dim begin As Integer
+    Dim bin As String
+    Dim dec As String
+    begin = 1
+    bin = TextBoxBin.Text
+    For i = 1 To Len(bin)
+        If (Mid(bin, i, 1) = " ") Then
+        Dim number As String
+        number = Mid(bin, begin, i - begin)
+            oct = oct & WorksheetFunction.Bin2Oct(number) & " "
+            begin = i + 1
+        End If
+    Next i
+    setValues "", oct, "", ""
+End Sub
+
+
+Private Sub TextBoxOct_Change()
+    isValid
+    Dim i As Integer
+    Dim begin As Integer
+    Dim dec As String
+    Dim oct As String
+    begin = 1
+    oct = TextBoxOct.Text
+    For i = 1 To Len(oct)
+        If (Mid(oct, i, 1) = " ") Then
+        Dim number As String
+        number = Mid(oct, begin, i - begin)
+            dec = dec & WorksheetFunction.Oct2Dec(number) & " "
+            begin = i + 1
+        End If
+    Next i
+    setValues "", "", dec, ""
+End Sub
+
+Private Sub TextBoxDec_Change()
+    isValid
+    Dim i As Integer
+    Dim begin As Integer
+    Dim dec As String
+    Dim hex As String
+    begin = 1
+    dec = TextBoxDec.Text
+    For i = 1 To Len(dec)
+        If (Mid(dec, i, 1) = " ") Then
+        Dim number As String
+        number = Mid(dec, begin, i - begin)
+            hex = hex & WorksheetFunction.Dec2Hex(number) & " "
+            begin = i + 1
+        End If
+    Next i
+    setValues "", "", "", hex
+End Sub
+
+Private Sub TextBoxHex_Change()
+    isValid
+    Dim i As Integer
+    Dim begin As Integer
+    Dim bin As String
+    Dim hex As String
+    begin = 1
+    hex = TextBoxHex.Text
+    For i = 1 To Len(hex)
+        If (Mid(hex, i, 1) = " ") Then
+        Dim number As String
+        number = Mid(hex, begin, i - begin)
+            bin = bin & WorksheetFunction.Hex2Bin(number) & " "
+            begin = i + 1
+        End If
+    Next i
+    setValues bin, "", "", ""
+End Sub
